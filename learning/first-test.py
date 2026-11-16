@@ -7,6 +7,7 @@ import bilby
 import numpy as np
 from bilby.core.utils import random
 
+print("program started")
 
 data = TimeSeries.fetch_open_data('L1', 'Sep 14 2015 09:50:29', 'Sep 14 2015 09:51:01')
 
