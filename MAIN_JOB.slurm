@@ -1,9 +1,12 @@
-#!/usr/bin/bash #sbatch -J Bilby_Job
+#!/bin/bash 
+#SBATCH --job-name=Bilby_Job
+#SBATCH --nodes=1
 #SBATCH --ntasks=1 --cpus-per-task=4 --constraint=hasw
+#SBATCH --mem-per-cpu=4G
 #SBATCH --time=4:00:00
 #SBATCH --output=%x-%j.out
-#SBATCH --mem=4G
 #SBATCH --nodes=1
+
 
 module purge
 module load anaconda3/2026.7
