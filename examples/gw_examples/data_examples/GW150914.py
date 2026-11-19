@@ -17,6 +17,8 @@ logger = bilby.core.utils.logger
 outdir = "outdir"
 label = "GW150914"
 
+bilby.core.utils.setup_logger(log_level="INFO")
+
 # example sampling frequency - copied in from the calibration example
 sampling_frequency = 1024
 
@@ -25,7 +27,7 @@ sampling_frequency = 1024
 # > datasets.event_gps("GW150914")+
 trigger_time = 1126259462.4
 detectors = ["H1", "L1"]
-maximum_frequency = 512
+maximum_frequency = 1024
 minimum_frequency = 20
 roll_off = 0.4  # Roll off duration of tukey window in seconds, default is 0.4s
 duration = 4  # Analysis segment duration
@@ -96,23 +98,20 @@ waveform_generator = bilby.gw.WaveformGenerator(
 # )
 
 for ifo in ifo_list:
-    
-
-    
     ifo.calibration_model = bilby.gw.calibration.CubicSpline(
         prefix=f"recalib_{ifo.name}_",
         minimum_frequency=ifo.minimum_frequency,
         maximum_frequency=ifo.maximum_frequency,
-        n_points=5,
+        n_points=10,
     )
 
     calibration_priors = bilby.gw.prior.CalibrationPriorDict.constant_uncertainty_spline(
     amplitude_sigma=0.1,
-    phase_sigma=0.1,
+    phase_sigma=0.2,
     label=ifo.name,
-    minimum_frequency=20,
-    maximum_frequency=512,
-    n_nodes=5, 
+    minimum_frequency=minimum_frequency,
+    maximum_frequency=maximum_frequency,
+    n_nodes=10, 
     )
 
     priors.update(calibration_priors)
