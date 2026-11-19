@@ -17,9 +17,12 @@ logger = bilby.core.utils.logger
 outdir = "outdir"
 label = "GW150914"
 
+# example sampling frequency - copied in from the calibration example
+sampling_frequency = 1024
+
 # Note you can get trigger times using the gwosc package, e.g.:
 # > from gwosc import datasets
-# > datasets.event_gps("GW150914")
+# > datasets.event_gps("GW150914")+
 trigger_time = 1126259462.4
 detectors = ["H1", "L1"]
 maximum_frequency = 512
@@ -85,6 +88,40 @@ waveform_generator = bilby.gw.WaveformGenerator(
     },
 )
 
+### CALIBRATION CODE
+
+#   this is sample injection data 
+# ifo_list.set_strain_data_from_power_spectral_densities(
+#     sampling_frequency=sampling_frequency, duration=duration
+# )
+
+for ifo in ifo_list:
+    
+
+    
+    ifo.calibration_model = bilby.gw.calibration.CubicSpline(
+        prefix=f"recalib_{ifo.name}_",
+        minimum_frequency=ifo.minimum_frequency,
+        maximum_frequency=ifo.maximum_frequency,
+        n_points=5,
+    )
+
+    calibration_priors = bilby.gw.prior.CalibrationPriorDict.constant_uncertainty_spline(
+    amplitude_sigma=0.1,
+    phase_sigma=0.1,
+    label=ifo.name,
+    minimum_frequency=20,
+    maximum_frequency=512,
+    n_nodes=5, 
+    )
+
+    priors.update(calibration_priors)
+
+    # priors.update(
+    #     {f"recalib_{ifo.name}_amplitude_{ii}": 0.1 for ii in range(5)}
+    # 
+    # priors.update({f"recalib_{ifo.name}_phase_{ii}": 0.01 for ii in range(5)})
+
 # In this step, we define the likelihood. Here we use the standard likelihood
 # function, passing it the data and the waveform generator.
 # Note, phase_marginalization is formally invalid with a precessing waveform such as IMRPhenomPv2
@@ -92,7 +129,7 @@ likelihood = bilby.gw.likelihood.GravitationalWaveTransient(
     ifo_list,
     waveform_generator,
     priors=priors,
-    time_marginalization=True,
+    time_marginalization=False,
     phase_marginalization=False,
     distance_marginalization=True,
 )
@@ -105,10 +142,11 @@ result = bilby.run_sampler(
     sampler="dynesty",
     outdir=outdir,
     label=label,
-    nlive=1000,
+    nlive=100,
+    sample="acceptance-walk",
+    naccept=5,
     check_point_delta_t=600,
     check_point_plot=True,
-    npool=1,
     conversion_function=bilby.gw.conversion.generate_all_bbh_parameters,
     result_class=bilby.gw.result.CBCResult,
 )

@@ -130,6 +130,7 @@ result = bilby.run_sampler(
     outdir=outdir,
     label=label,
     result_class=bilby.gw.result.CBCResult,
+    npool=4
 )
 
 # make some plots of the outputs
