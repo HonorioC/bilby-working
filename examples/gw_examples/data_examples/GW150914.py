@@ -44,7 +44,7 @@ ifo_list = bilby.gw.detector.InterferometerList([])
 for det in detectors:
     logger.info("Downloading analysis data for ifo {}".format(det))
     ifo = bilby.gw.detector.get_empty_interferometer(det)
-    data = TimeSeries.fetch_open_data(det, start_time, end_time)
+    data = TimeSeries.read(f"{det[0]}-{det}_LOSC_4_V1-1126256640-4096.gwf", f"{det}:LOSC-STRAIN", start_time, end_time)
     ifo.strain_data.set_from_gwpy_timeseries(data)
 
     logger.info("Downloading psd data for ifo {}".format(det))
