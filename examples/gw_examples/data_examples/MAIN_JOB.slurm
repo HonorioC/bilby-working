@@ -1,9 +1,9 @@
 #!/bin/bash 
 #SBATCH --job-name=Bilby_Job
 #SBATCH --nodes=1
-#SBATCH --ntasks=1 --cpus-per-task=1
-#SBATCH --mem-per-cpu=4G
-#SBATCH --time=4:00:00
+#SBATCH --ntasks=1 --cpus-per-task=16
+#SBATCH --mem-per-cpu=3G
+#SBATCH --time=48:00:00
 #SBATCH --output=%x-%j.out
 #SBATCH --nodes=1
 

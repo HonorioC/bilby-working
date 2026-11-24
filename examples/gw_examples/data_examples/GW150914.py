@@ -14,7 +14,7 @@ import bilby
 from gwpy.timeseries import TimeSeries
 
 logger = bilby.core.utils.logger
-outdir = "outdir"
+outdir = "/scratch/network/yc6639/biscoveanuLab/calibrationLongTest/outdir"
 label = "GW150914"
 
 bilby.core.utils.setup_logger(log_level="INFO")
@@ -148,5 +148,6 @@ result = bilby.run_sampler(
     check_point_plot=True,
     conversion_function=bilby.gw.conversion.generate_all_bbh_parameters,
     result_class=bilby.gw.result.CBCResult,
+    npool=32
 )
 result.plot_corner()
