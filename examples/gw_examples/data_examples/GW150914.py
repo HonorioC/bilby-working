@@ -141,13 +141,13 @@ result = bilby.run_sampler(
     sampler="dynesty",
     outdir=outdir,
     label=label,
-    nlive=100,
+    nlive=1000,
     sample="acceptance-walk",
-    naccept=5,
+    naccept=60,
     check_point_delta_t=600,
     check_point_plot=True,
     conversion_function=bilby.gw.conversion.generate_all_bbh_parameters,
     result_class=bilby.gw.result.CBCResult,
-    npool=32
+    npool=16
 )
 result.plot_corner()

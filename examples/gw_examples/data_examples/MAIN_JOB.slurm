@@ -2,9 +2,9 @@
 #SBATCH --job-name=Bilby_Job
 #SBATCH --nodes=1
 #SBATCH --ntasks=1 --cpus-per-task=16
-#SBATCH --mem-per-cpu=3G
+#SBATCH --mem-per-cpu=2G
 #SBATCH --time=48:00:00
-#SBATCH --output=%x-%j.out
+#SBATCH --output=./slurm_logs/%x-%j.out
 #SBATCH --nodes=1
 
 
